@@ -6,6 +6,8 @@ import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvFileSource;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class FizzBuzzTest {
@@ -39,8 +41,7 @@ public class FizzBuzzTest {
 		String expected = "FizzBuzz";
 		assertEquals(expected, FizzBuzz.compute(15), "Divisible by 3 and 5");
 	}
-	
-	
+
 	// if number is not divisible by 3 or 5 return number
 	@DisplayName("Divisible by Three Or Five")
 	@Order(4)
@@ -49,5 +50,15 @@ public class FizzBuzzTest {
 
 		String expected = "1";
 		assertEquals(expected, FizzBuzz.compute(1), "Not Divisible by 3 or 5");
+	}
+
+	// if number is not divisible by 3 or 5 return number
+	@DisplayName("Parametized test using csv file")
+	@Order(5)
+	@ParameterizedTest(name = "value={0},expected={1}")
+	@CsvFileSource(resources = "/small-data-file.csv")
+	public void paremterizedTest(int value, String expected) {
+
+		assertEquals(expected, FizzBuzz.compute(value), "Parametized Tets");
 	}
 }
