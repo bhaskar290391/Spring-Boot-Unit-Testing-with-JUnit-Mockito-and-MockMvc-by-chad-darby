@@ -52,12 +52,31 @@ public class FizzBuzzTest {
 		assertEquals(expected, FizzBuzz.compute(1), "Not Divisible by 3 or 5");
 	}
 
-	// if number is not divisible by 3 or 5 return number
+	
 	@DisplayName("Parametized test using csv file")
 	@Order(5)
 	@ParameterizedTest(name = "value={0},expected={1}")
 	@CsvFileSource(resources = "/small-data-file.csv")
-	public void paremterizedTest(int value, String expected) {
+	public void paremterizedTestForSmallFile(int value, String expected) {
+
+		assertEquals(expected, FizzBuzz.compute(value), "Parametized Tets");
+	}
+	
+	@DisplayName("Parametized test using Medium csv file")
+	@Order(5)
+	@ParameterizedTest(name = "value={0},expected={1}")
+	@CsvFileSource(resources = "/medium-test-data.csv")
+	public void paremterizedTestForMediumFile(int value, String expected) {
+
+		assertEquals(expected, FizzBuzz.compute(value), "Parametized Tets");
+	}
+	
+	
+	@DisplayName("Parametized test using large csv file")
+	@Order(5)
+	@ParameterizedTest(name = "value={0},expected={1}")
+	@CsvFileSource(resources = "/large-test-data.csv")
+	public void paremterizedTestForLargeFile(int value, String expected) {
 
 		assertEquals(expected, FizzBuzz.compute(value), "Parametized Tets");
 	}
