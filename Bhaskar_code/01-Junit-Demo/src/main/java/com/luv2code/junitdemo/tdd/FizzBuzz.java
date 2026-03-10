@@ -16,4 +16,22 @@ public class FizzBuzz {
 
 	}
 
+	public static String computes(int numbers) {
+
+		StringBuilder br = new StringBuilder();
+
+		if (numbers % 3 == 0) {
+			br.append("Fizz");
+		}
+
+		if (numbers % 5 == 0) {
+			br.append("Buzz");
+		}
+
+		if (!((numbers % 3 == 0) || (numbers % 5 == 0)))
+			br.append(numbers);
+
+		return br.toString();
+	}
+
 }
