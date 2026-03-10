@@ -11,10 +11,6 @@ import org.junit.jupiter.api.TestMethodOrder;
 public class FizzBuzzTest {
 
 	// if number divisible by 3 return Fizz
-	// if number divisible by 5 return Buzz
-	// if number divisible by 3 and 5 return FizzBuzz
-	// if number is not divisible by 3 or 5 return number
-
 	@DisplayName("Divisible by Three")
 	@Order(1)
 	@Test
@@ -24,6 +20,7 @@ public class FizzBuzzTest {
 		assertEquals(expected, FizzBuzz.compute(3), "Divisible by 3");
 	}
 
+	// if number divisible by 5 return Buzz
 	@DisplayName("Divisible by Five")
 	@Order(2)
 	@Test
@@ -31,5 +28,26 @@ public class FizzBuzzTest {
 
 		String expected = "Buzz";
 		assertEquals(expected, FizzBuzz.compute(5), "Divisible by 5");
+	}
+
+	// if number divisible by 3 and 5 return FizzBuzz
+	@DisplayName("Divisible by Three and Five")
+	@Order(3)
+	@Test
+	public void divisibleByThreeAndFive() {
+
+		String expected = "FizzBuzz";
+		assertEquals(expected, FizzBuzz.compute(15), "Divisible by 3 and 5");
+	}
+	
+	
+	// if number is not divisible by 3 or 5 return number
+	@DisplayName("Divisible by Three Or Five")
+	@Order(4)
+	@Test
+	public void divisibleByThreeOrFive() {
+
+		String expected = "1";
+		assertEquals(expected, FizzBuzz.compute(1), "Not Divisible by 3 or 5");
 	}
 }
