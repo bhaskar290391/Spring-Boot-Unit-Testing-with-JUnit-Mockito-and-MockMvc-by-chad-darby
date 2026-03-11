@@ -1,6 +1,7 @@
 package com.luv2code.test;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -82,5 +83,39 @@ public class MockitoExampleTest {
 		when(repo.checkNull(grades.getMathGradeResults())).thenReturn(true);
 		
 		assertNotNull(service.checkNull(students.getStudentGrades().getMathGradeResults()));
+	}
+	
+	
+	@DisplayName("Check whether method exception")
+	@Test
+	public void throwsException() {
+		
+		CollegeStudent studentsData=(CollegeStudent) context.getBean(CollegeStudent.class);
+		doThrow(RuntimeException.class).when(repo).checkNull(studentsData);
+		
+		assertThrows(RuntimeException.class, ()->{
+			service.checkNull(studentsData);
+		});
+		
+		verify(repo,times(1)).checkNull(studentsData);
+	}
+	
+	
+	@DisplayName("Check whether method exception for consecutive call")
+	@Test
+	public void throwsExceptionMutipleCalls() {
+		
+		CollegeStudent studentsData=(CollegeStudent) context.getBean(CollegeStudent.class);
+		when(repo.checkNull(studentsData)).thenThrow(RuntimeException.class).thenReturn("Do not throw exception");
+		
+		assertThrows(RuntimeException.class, ()->{
+			service.checkNull(studentsData);
+		});
+		
+		verify(repo,times(1)).checkNull(studentsData);
+		
+		assertEquals("Do not throw exception", service.checkNull(studentsData));
+		
+		verify(repo,times(2)).checkNull(studentsData);
 	}
 }
