@@ -1,6 +1,6 @@
 package com.luv2code.test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -72,5 +72,15 @@ public class MockitoExampleTest {
 		when(repo.findGradePointAverage(grades.getMathGradeResults())).thenReturn(85.32);
 		
 		assertEquals(85.32, service.findGradePointAverage(students.getStudentGrades().getMathGradeResults()));
+	}
+	
+	
+	@DisplayName("Check Not Null")
+	@Test
+	public void checkNotNull() {
+		
+		when(repo.checkNull(grades.getMathGradeResults())).thenReturn(true);
+		
+		assertNotNull(service.checkNull(students.getStudentGrades().getMathGradeResults()));
 	}
 }
