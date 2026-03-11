@@ -1,69 +1,79 @@
 package com.luv2code.component.models;
 
 public class CollegeStudent implements Student {
-    private String firstname;
-    private String lastname;
-    private String emailAddress;
-    private StudentGrades studentGrades;
 
-    public CollegeStudent() {
-    }
+	private int id;
+	private String firstname;
+	private String lastname;
+	private String emailAddress;
+	private StudentGrades studentGrades;
 
-    public CollegeStudent(String firstname, String lastname, String emailAddress) {
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.emailAddress = emailAddress;
-    }
+	public CollegeStudent() {
+	}
 
-    public String getFirstname() {
-        return firstname;
-    }
+	public CollegeStudent(String firstname, String lastname, String emailAddress) {
+		this.firstname = firstname;
+		this.lastname = lastname;
+		this.emailAddress = emailAddress;
+	}
 
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
-    }
+	public int getId() {
+		return id;
+	}
 
-    public String getLastname() {
-        return lastname;
-    }
+	public void setId(int id) {
+		this.id = id;
+	}
 
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
-    }
+	public String getFirstname() {
+		return firstname;
+	}
 
-    public String getEmailAddress() {
-        return emailAddress;
-    }
+	public void setFirstname(String firstname) {
+		this.firstname = firstname;
+	}
 
-    public void setEmailAddress(String emailAddress) {
-        this.emailAddress = emailAddress;
-    }
+	public String getLastname() {
+		return lastname;
+	}
 
-    public StudentGrades getStudentGrades() {
-        return studentGrades;
-    }
+	public void setLastname(String lastname) {
+		this.lastname = lastname;
+	}
 
-    public void setStudentGrades(StudentGrades studentGrades) {
-        this.studentGrades = studentGrades;
-    }
+	public String getEmailAddress() {
+		return emailAddress;
+	}
 
-    @Override
-    public String toString() {
-        return "CollegeStudent{" +
-                "firstname='" + firstname + '\'' +
-                ", lastname='" + lastname + '\'' +
-                ", emailAddress='" + emailAddress + '\'' +
-                ", studentGrades=" + studentGrades +
-                '}';
-    }
+	public void setEmailAddress(String emailAddress) {
+		this.emailAddress = emailAddress;
+	}
 
-    @Override
-    public String studentInformation() {
-        return getFullName() + " " + getEmailAddress();
-    }
+	public StudentGrades getStudentGrades() {
+		return studentGrades;
+	}
 
-    @Override
-    public String getFullName() {
-        return getFirstname() + " " + getLastname();
-    }
+	public void setStudentGrades(StudentGrades studentGrades) {
+		this.studentGrades = studentGrades;
+	}
+
+	@Override
+	public String toString() {
+		return "CollegeStudent{" + "firstname='" + firstname + '\'' + ", lastname='" + lastname + '\''
+				+ ", emailAddress='" + emailAddress + '\'' + ", studentGrades=" + studentGrades + '}';
+	}
+
+	@Override
+	public String studentInformation() {
+		return getFullName() + " " + getEmailAddress();
+	}
+
+	@Override
+	public String getFullName() {
+		return getFirstname() + " " + getLastname();
+	}
+
+	private String getFirsNameAndId() {
+		return getFirstname() + " " + getId();
+	}
 }
