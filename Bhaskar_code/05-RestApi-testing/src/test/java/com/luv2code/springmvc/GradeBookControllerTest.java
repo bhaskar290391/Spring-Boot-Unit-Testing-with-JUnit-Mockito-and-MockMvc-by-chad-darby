@@ -176,9 +176,22 @@ public class GradeBookControllerTest {
 
 		assertTrue(student.isPresent());
 
-		mockmvc.perform(MockMvcRequestBuilders.get("/studentInformation/{id}",1)).andExpect(status().isOk())
+		mockmvc.perform(MockMvcRequestBuilders.get("/studentInformation/{id}", 1)).andExpect(status().isOk())
 				.andExpect(content().contentType(APPLICATION_JSON_UTF8)).andExpect(jsonPath("$.id", is(1)))
 				.andExpect(jsonPath("$.firstname", is("Eric"))).andExpect(jsonPath("$.lastname", is("Roby")));
+
+	}
+	
+	
+	@Test
+	public void getStudentsInformationHttpRequestWhoDoesNotExists() throws Exception {
+
+		assertFalse(studentDao.findById(0).isPresent());
+
+		mockmvc.perform(MockMvcRequestBuilders.get("/studentInformation/{id}", 0)).andExpect(status().is4xxClientError())
+				.andExpect(content().contentType(APPLICATION_JSON_UTF8))
+				.andExpect(jsonPath("$.message", is("Student or Grade was not found")))
+				.andExpect(jsonPath("$.status", is(404)));
 
 	}
 
