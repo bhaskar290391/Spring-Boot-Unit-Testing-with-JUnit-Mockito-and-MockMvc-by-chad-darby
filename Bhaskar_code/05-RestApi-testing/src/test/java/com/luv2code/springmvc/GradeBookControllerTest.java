@@ -28,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -152,6 +153,19 @@ public class GradeBookControllerTest {
 				.andExpect(content().contentType(APPLICATION_JSON_UTF8)).andExpect(jsonPath("$", hasSize(0)));
 
 		assertFalse(studentDao.findById(1).isPresent());
+	}
+
+	@Test
+	public void deleteStudentsWhoDoesNotExists() throws Exception {
+
+		assertFalse(studentDao.findById(0).isPresent());
+
+		mockmvc.perform(MockMvcRequestBuilders.delete("/student/{id}", 0))
+		.andExpect(status().is4xxClientError())
+		.andExpect(content().contentType(APPLICATION_JSON_UTF8))
+		.andExpect(jsonPath("$.message", is("Student or Grade was not found")))
+		.andExpect(jsonPath("$.status", is(404)));
+
 	}
 
 	@AfterEach
