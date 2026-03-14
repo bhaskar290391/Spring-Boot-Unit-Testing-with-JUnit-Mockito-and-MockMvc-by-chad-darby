@@ -33,6 +33,8 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import java.util.Optional;
+
 @TestPropertySource("/application-test.properties")
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -160,11 +162,23 @@ public class GradeBookControllerTest {
 
 		assertFalse(studentDao.findById(0).isPresent());
 
-		mockmvc.perform(MockMvcRequestBuilders.delete("/student/{id}", 0))
-		.andExpect(status().is4xxClientError())
-		.andExpect(content().contentType(APPLICATION_JSON_UTF8))
-		.andExpect(jsonPath("$.message", is("Student or Grade was not found")))
-		.andExpect(jsonPath("$.status", is(404)));
+		mockmvc.perform(MockMvcRequestBuilders.delete("/student/{id}", 0)).andExpect(status().is4xxClientError())
+				.andExpect(content().contentType(APPLICATION_JSON_UTF8))
+				.andExpect(jsonPath("$.message", is("Student or Grade was not found")))
+				.andExpect(jsonPath("$.status", is(404)));
+
+	}
+
+	@Test
+	public void getStudentsInformationHttpRequest() throws Exception {
+
+		Optional<CollegeStudent> student = studentDao.findById(1);
+
+		assertTrue(student.isPresent());
+
+		mockmvc.perform(MockMvcRequestBuilders.get("/studentInformation/{id}",1)).andExpect(status().isOk())
+				.andExpect(content().contentType(APPLICATION_JSON_UTF8)).andExpect(jsonPath("$.id", is(1)))
+				.andExpect(jsonPath("$.firstname", is("Eric"))).andExpect(jsonPath("$.lastname", is("Roby")));
 
 	}
 
