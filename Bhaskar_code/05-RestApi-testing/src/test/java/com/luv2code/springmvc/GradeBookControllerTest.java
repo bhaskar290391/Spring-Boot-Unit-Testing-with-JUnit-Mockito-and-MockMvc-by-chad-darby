@@ -143,6 +143,17 @@ public class GradeBookControllerTest {
 		assertNotNull(studentDao.findByEmailAddress("maddy@gmail.com"));
 	}
 
+	@Test
+	public void deleteStudents() throws Exception {
+
+		assertTrue(studentDao.findById(1).isPresent());
+
+		mockmvc.perform(MockMvcRequestBuilders.delete("/student/{id}", 1)).andExpect(status().isOk())
+				.andExpect(content().contentType(APPLICATION_JSON_UTF8)).andExpect(jsonPath("$", hasSize(0)));
+
+		assertFalse(studentDao.findById(1).isPresent());
+	}
+
 	@AfterEach
 	public void setupAfterTransaction() {
 		jdbc.execute(sqlDeleteStudent);
