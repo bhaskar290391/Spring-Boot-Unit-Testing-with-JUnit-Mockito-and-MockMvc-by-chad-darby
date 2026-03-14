@@ -1,6 +1,14 @@
 package com.luv2code.springmvc;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.luv2code.springmvc.models.CollegeStudent;
+import com.luv2code.springmvc.repository.HistoryGradesDao;
+import com.luv2code.springmvc.repository.MathGradesDao;
+import com.luv2code.springmvc.repository.ScienceGradesDao;
+import com.luv2code.springmvc.repository.StudentDao;
+import com.luv2code.springmvc.service.StudentAndGradeService;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -13,18 +21,14 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.luv2code.springmvc.models.CollegeStudent;
-import com.luv2code.springmvc.repository.HistoryGradesDao;
-import com.luv2code.springmvc.repository.MathGradesDao;
-import com.luv2code.springmvc.repository.ScienceGradesDao;
-import com.luv2code.springmvc.repository.StudentDao;
-import com.luv2code.springmvc.service.StudentAndGradeService;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.transaction.Transactional;
+
+import static org.hamcrest.Matchers.hasSize;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @TestPropertySource("/application-test.properties")
 @AutoConfigureMockMvc
@@ -109,8 +113,19 @@ public class GradeBookControllerTest {
 	}
 
 	@Test
-	public void basicTest() {
-
+	public void getStudentsHttpRequest() throws Exception{
+		
+		collegeStudents.setFirstname("Bhaskar");
+		collegeStudents.setLastname("shetty");
+		collegeStudents.setEmailAddress("hello@gmail.com");
+		manager.persist(collegeStudents);
+		manager.flush();
+		
+		mockmvc.perform(MockMvcRequestBuilders.get("/"))
+		.andExpect(status().isOk())
+		.andExpect(content().contentType(APPLICATION_JSON_UTF8))
+		.andExpect(jsonPath("$", hasSize(2)));
+		
 	}
 
 	@AfterEach
