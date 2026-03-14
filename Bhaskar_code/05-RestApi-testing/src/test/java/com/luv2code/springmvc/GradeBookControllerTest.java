@@ -11,6 +11,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,6 +29,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
 import static org.hamcrest.Matchers.hasSize;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @TestPropertySource("/application-test.properties")
@@ -97,6 +99,7 @@ public class GradeBookControllerTest {
 
 	public static final MediaType APPLICATION_JSON_UTF8 = MediaType.APPLICATION_JSON;
 
+	@BeforeAll
 	public static void setup() {
 		request = new MockHttpServletRequest();
 		request.setParameter("firstName", "Bhaskar");
@@ -113,19 +116,31 @@ public class GradeBookControllerTest {
 	}
 
 	@Test
-	public void getStudentsHttpRequest() throws Exception{
-		
+	public void getStudentsHttpRequest() throws Exception {
+
 		collegeStudents.setFirstname("Bhaskar");
 		collegeStudents.setLastname("shetty");
 		collegeStudents.setEmailAddress("hello@gmail.com");
 		manager.persist(collegeStudents);
 		manager.flush();
-		
-		mockmvc.perform(MockMvcRequestBuilders.get("/"))
-		.andExpect(status().isOk())
-		.andExpect(content().contentType(APPLICATION_JSON_UTF8))
-		.andExpect(jsonPath("$", hasSize(2)));
-		
+
+		mockmvc.perform(MockMvcRequestBuilders.get("/")).andExpect(status().isOk())
+				.andExpect(content().contentType(APPLICATION_JSON_UTF8)).andExpect(jsonPath("$", hasSize(2)));
+
+	}
+
+	@Test
+	public void createStudents() throws Exception {
+
+		collegeStudents.setFirstname("Bhaskar");
+		collegeStudents.setLastname("maddy");
+		collegeStudents.setEmailAddress("maddy@gmail.com");
+
+		mockmvc.perform(
+				post("/").contentType(APPLICATION_JSON_UTF8).content(objectMapper.writeValueAsString(collegeStudents)))
+				.andExpect(jsonPath("$", hasSize(2)));
+
+		assertNotNull(studentDao.findByEmailAddress("maddy@gmail.com"));
 	}
 
 	@AfterEach
