@@ -181,14 +181,34 @@ public class GradeBookControllerTest {
 				.andExpect(jsonPath("$.firstname", is("Eric"))).andExpect(jsonPath("$.lastname", is("Roby")));
 
 	}
-	
-	
+
 	@Test
 	public void getStudentsInformationHttpRequestWhoDoesNotExists() throws Exception {
 
 		assertFalse(studentDao.findById(0).isPresent());
 
-		mockmvc.perform(MockMvcRequestBuilders.get("/studentInformation/{id}", 0)).andExpect(status().is4xxClientError())
+		mockmvc.perform(MockMvcRequestBuilders.get("/studentInformation/{id}", 0))
+				.andExpect(status().is4xxClientError()).andExpect(content().contentType(APPLICATION_JSON_UTF8))
+				.andExpect(jsonPath("$.message", is("Student or Grade was not found")))
+				.andExpect(jsonPath("$.status", is(404)));
+
+	}
+
+	@Test
+	public void createValidGradeForStudent() throws Exception {
+
+		mockmvc.perform(post("/grades").contentType(APPLICATION_JSON_UTF8).param("grade", "85.0")
+				.param("gradeType", "math").param("studentId", "1"))
+				.andExpect(content().contentType(APPLICATION_JSON_UTF8)).andExpect(jsonPath("$.id", is(1)))
+				.andExpect(jsonPath("$.firstname", is("Eric"))).andExpect(jsonPath("$.lastname", is("Roby")));
+
+	}
+
+	@Test
+	public void createValidGradeForStudentWhoDoesNotExist() throws Exception {
+
+		mockmvc.perform(post("/grades").contentType(APPLICATION_JSON_UTF8).param("grade", "85.0")
+				.param("gradeType", "math").param("studentId", "0")).andExpect(status().is4xxClientError())
 				.andExpect(content().contentType(APPLICATION_JSON_UTF8))
 				.andExpect(jsonPath("$.message", is("Student or Grade was not found")))
 				.andExpect(jsonPath("$.status", is(404)));
