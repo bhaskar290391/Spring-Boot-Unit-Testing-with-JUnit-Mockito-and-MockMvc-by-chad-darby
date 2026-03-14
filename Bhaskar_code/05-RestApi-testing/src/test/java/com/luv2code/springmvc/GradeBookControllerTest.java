@@ -2,6 +2,7 @@ package com.luv2code.springmvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.luv2code.springmvc.models.CollegeStudent;
+import com.luv2code.springmvc.models.MathGrade;
 import com.luv2code.springmvc.repository.HistoryGradesDao;
 import com.luv2code.springmvc.repository.MathGradesDao;
 import com.luv2code.springmvc.repository.ScienceGradesDao;
@@ -221,6 +222,39 @@ public class GradeBookControllerTest {
 		mockmvc.perform(post("/grades").contentType(APPLICATION_JSON_UTF8).param("grade", "85.0")
 				.param("gradeType", "Literature").param("studentId", "1")).andExpect(status().is4xxClientError())
 				.andExpect(content().contentType(APPLICATION_JSON_UTF8))
+				.andExpect(jsonPath("$.message", is("Student or Grade was not found")))
+				.andExpect(jsonPath("$.status", is(404)));
+
+	}
+
+	@Test
+	public void deleteGrades() throws Exception {
+
+		Optional<MathGrade> byId = mathGradeDao.findById(1);
+
+		assertTrue(byId.isPresent());
+
+		mockmvc.perform(MockMvcRequestBuilders.delete("/grades/{id}/{gradeType}", 1, "math")).andExpect(status().isOk())
+				.andExpect(content().contentType(APPLICATION_JSON_UTF8)).andExpect(jsonPath("$.id", is(1)))
+				.andExpect(jsonPath("$.firstname", is("Eric"))).andExpect(jsonPath("$.lastname", is("Roby")));
+
+	}
+
+	@Test
+	public void deleteGradesInvalidGradeType() throws Exception {
+
+		mockmvc.perform(MockMvcRequestBuilders.delete("/grades/{id}/{gradeType}", 1, "Literature"))
+				.andExpect(status().is4xxClientError()).andExpect(content().contentType(APPLICATION_JSON_UTF8))
+				.andExpect(jsonPath("$.message", is("Student or Grade was not found")))
+				.andExpect(jsonPath("$.status", is(404)));
+
+	}
+
+	@Test
+	public void deleteGradesInvalidGradeTypeAndGrade() throws Exception {
+
+		mockmvc.perform(MockMvcRequestBuilders.delete("/grades/{id}/{gradeType}", 0, "Literature"))
+				.andExpect(status().is4xxClientError()).andExpect(content().contentType(APPLICATION_JSON_UTF8))
 				.andExpect(jsonPath("$.message", is("Student or Grade was not found")))
 				.andExpect(jsonPath("$.status", is(404)));
 
