@@ -215,6 +215,17 @@ public class GradeBookControllerTest {
 
 	}
 
+	@Test
+	public void createValidGradeForStudentInvalidGradeType() throws Exception {
+
+		mockmvc.perform(post("/grades").contentType(APPLICATION_JSON_UTF8).param("grade", "85.0")
+				.param("gradeType", "Literature").param("studentId", "1")).andExpect(status().is4xxClientError())
+				.andExpect(content().contentType(APPLICATION_JSON_UTF8))
+				.andExpect(jsonPath("$.message", is("Student or Grade was not found")))
+				.andExpect(jsonPath("$.status", is(404)));
+
+	}
+
 	@AfterEach
 	public void setupAfterTransaction() {
 		jdbc.execute(sqlDeleteStudent);
