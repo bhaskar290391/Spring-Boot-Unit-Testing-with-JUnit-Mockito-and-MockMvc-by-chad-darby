@@ -3,6 +3,8 @@ package com.luv2code.springmvc;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.AfterEach;
@@ -62,6 +64,22 @@ public class StudentGradeServiceTest {
 		deletedStudent = repo.findById(1);
 
 		assertFalse(deletedStudent.isPresent());
+	}
+	
+	@Test
+	public void checkNumberOfStudents() {
+		
+		Iterable<CollegeStudent> gradeBook = service.getGradeBook();
+		
+		List<CollegeStudent> data=new ArrayList<>();
+		
+		
+		for (CollegeStudent collegeStudent : gradeBook) {
+			data.add(collegeStudent);
+			
+		}
+		
+		assertEquals(1, data.size());
 	}
 
 	@AfterEach

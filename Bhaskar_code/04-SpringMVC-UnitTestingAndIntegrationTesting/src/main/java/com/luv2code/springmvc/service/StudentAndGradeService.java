@@ -44,4 +44,11 @@ public class StudentAndGradeService {
 		}
 	}
 
+	public Iterable<CollegeStudent> getGradeBook() {
+
+		Iterable<CollegeStudent> data = repo.findAll();
+
+		return data;
+	}
+
 }
