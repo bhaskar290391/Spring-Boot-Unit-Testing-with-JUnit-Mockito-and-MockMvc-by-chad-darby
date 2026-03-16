@@ -46,7 +46,7 @@ public class GradebookControllerTest {
 
 	@Mock
 	private StudentAndGradeService studentCreateServiceMock;
-	
+
 	@Autowired
 	private StudentDao studentDao;
 
@@ -57,8 +57,6 @@ public class GradebookControllerTest {
 		request.setParameter("lastname", "mudaliyar");
 		request.setParameter("emailAddress", "soni@gmail.com");
 	}
-	
-	
 
 	@BeforeEach
 	public void setupDatabase() {
@@ -87,23 +85,48 @@ public class GradebookControllerTest {
 	public void createStudents() throws Exception {
 
 		CollegeStudent one = new GradebookCollegeStudent("Kanishk", "Mudaliyar", "kanishk@gmail.com");
-		
 
 		List<CollegeStudent> data = new ArrayList<>(Arrays.asList(one));
 		when(studentCreateServiceMock.getGradeBook()).thenReturn(data);
 		assertIterableEquals(data, studentCreateServiceMock.getGradeBook());
-		
-		MvcResult mavData = mockMVC.perform(post("/").contentType(MediaType.APPLICATION_JSON)
-				.param("firstname", request.getParameter("firstname"))
-				.param("lastname", request.getParameter("lastname")).param("emailAddress", request.getParameter("emailAddress")))
+
+		MvcResult mavData = mockMVC
+				.perform(post("/").contentType(MediaType.APPLICATION_JSON)
+						.param("firstname", request.getParameter("firstname"))
+						.param("lastname", request.getParameter("lastname"))
+						.param("emailAddress", request.getParameter("emailAddress")))
 				.andExpect(status().isOk()).andReturn();
 
 		ModelAndView datas = mavData.getModelAndView();
 
 		ModelAndViewAssert.assertViewName(datas, "index");
-		
+
 		CollegeStudent byEmailAddress = studentDao.findByEmailAddress("soni@gmail.com");
 		assertNotNull(byEmailAddress);
+	}
+
+	@Test
+	public void deleteStudent() throws Exception {
+		assertTrue(studentDao.findById(1).isPresent());
+		MvcResult mavData = mockMVC.perform(MockMvcRequestBuilders.get("/student/delete/{id}", 1))
+				.andExpect(status().isOk()).andReturn();
+		ModelAndView datas = mavData.getModelAndView();
+
+		ModelAndViewAssert.assertViewName(datas, "index");
+
+		assertFalse(studentDao.findById(1).isPresent());
+
+	}
+
+	@Test
+	public void deleteStudentForerrorPage() throws Exception {
+
+		MvcResult mavData = mockMVC.perform(MockMvcRequestBuilders.get("/student/delete/{id}", 0))
+				.andExpect(status().isOk()).andReturn();
+		ModelAndView datas = mavData.getModelAndView();
+
+		ModelAndViewAssert.assertViewName(datas, "error");
+
 	}
 
 	@AfterEach

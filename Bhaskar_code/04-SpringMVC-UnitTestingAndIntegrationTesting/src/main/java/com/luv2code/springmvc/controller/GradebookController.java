@@ -11,15 +11,33 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 public class GradebookController {
 
+	private final CollegeStudent getCollegeStudent;
+
 	@Autowired
 	private Gradebook gradebook;
 
 	@Autowired
 	private StudentAndGradeService service;
 
+	GradebookController(CollegeStudent getCollegeStudent) {
+		this.getCollegeStudent = getCollegeStudent;
+	}
+
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String getStudents(Model m) {
 
+		Iterable<CollegeStudent> gradeBook2 = service.getGradeBook();
+		m.addAttribute("students", gradeBook2);
+		return "index";
+	}
+
+	@GetMapping(value = "/student/delete/{id}")
+	public String deleteStudents(@PathVariable("id") int id, Model m) {
+
+		if (!service.checkStudentIsNull(id)) {
+			return "error";
+		}
+		service.deleteStudent(id);
 		Iterable<CollegeStudent> gradeBook2 = service.getGradeBook();
 		m.addAttribute("students", gradeBook2);
 		return "index";
