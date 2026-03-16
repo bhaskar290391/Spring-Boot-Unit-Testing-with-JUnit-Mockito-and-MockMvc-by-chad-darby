@@ -45,7 +45,7 @@ public class GradebookControllerTest {
 	private static MockHttpServletRequest request;
 
 	@Mock
-	private StudentAndGradeService serviceMock;
+	private StudentAndGradeService studentCreateServiceMock;
 	
 	@Autowired
 	private StudentDao studentDao;
@@ -73,8 +73,8 @@ public class GradebookControllerTest {
 		CollegeStudent two = new GradebookCollegeStudent("sammy", "Mudaliyar", "sammy@gmail.com");
 
 		List<CollegeStudent> data = new ArrayList<>(Arrays.asList(one, two));
-		when(serviceMock.getGradeBook()).thenReturn(data);
-		assertIterableEquals(data, serviceMock.getGradeBook());
+		when(studentCreateServiceMock.getGradeBook()).thenReturn(data);
+		assertIterableEquals(data, studentCreateServiceMock.getGradeBook());
 
 		MvcResult mavData = mockMVC.perform(MockMvcRequestBuilders.get("/")).andExpect(status().isOk()).andReturn();
 		ModelAndView datas = mavData.getModelAndView();
@@ -86,6 +86,13 @@ public class GradebookControllerTest {
 	@Test
 	public void createStudents() throws Exception {
 
+		CollegeStudent one = new GradebookCollegeStudent("Kanishk", "Mudaliyar", "kanishk@gmail.com");
+		
+
+		List<CollegeStudent> data = new ArrayList<>(Arrays.asList(one));
+		when(studentCreateServiceMock.getGradeBook()).thenReturn(data);
+		assertIterableEquals(data, studentCreateServiceMock.getGradeBook());
+		
 		MvcResult mavData = mockMVC.perform(post("/").contentType(MediaType.APPLICATION_JSON)
 				.param("firstname", request.getParameter("firstname"))
 				.param("lastname", request.getParameter("lastname")).param("emailAddress", request.getParameter("emailAddress")))

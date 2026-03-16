@@ -29,6 +29,8 @@ public class GradebookController {
 	public String createStudent(@ModelAttribute("student") CollegeStudent student, Model m) {
 
 		service.createStudent(student.getFirstname(), student.getLastname(), student.getEmailAddress());
+		Iterable<CollegeStudent> gradeBook2 = service.getGradeBook();
+		m.addAttribute("students", gradeBook2);
 		return "index";
 	}
 
