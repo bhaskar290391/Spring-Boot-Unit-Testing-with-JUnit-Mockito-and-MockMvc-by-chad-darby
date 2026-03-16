@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.jdbc.Sql;
 
 import com.luv2code.springmvc.dao.StudentDao;
 import com.luv2code.springmvc.models.CollegeStudent;
@@ -66,6 +67,7 @@ public class StudentGradeServiceTest {
 		assertFalse(deletedStudent.isPresent());
 	}
 	
+	@Sql("/insert-data.sql")
 	@Test
 	public void checkNumberOfStudents() {
 		
@@ -79,7 +81,7 @@ public class StudentGradeServiceTest {
 			
 		}
 		
-		assertEquals(1, data.size());
+		assertEquals(5, data.size());
 	}
 
 	@AfterEach
