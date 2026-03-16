@@ -26,14 +26,21 @@ public class StudentAndGradeService {
 	}
 
 	public Boolean checkStudentIsNull(int id) {
-		
+
 		Optional<CollegeStudent> byId = repo.findById(id);
-		
-		if (byId.isEmpty()) {
-			return false;
-			
-		}else{
+
+		if (byId.isPresent()) {
 			return true;
+
+		} else {
+			return false;
+		}
+	}
+
+	public void deleteStudent(int id) {
+
+		if (checkStudentIsNull(id)) {
+			repo.deleteById(id);
 		}
 	}
 

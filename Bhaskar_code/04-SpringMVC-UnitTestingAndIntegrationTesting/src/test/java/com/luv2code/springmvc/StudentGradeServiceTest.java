@@ -3,6 +3,8 @@ package com.luv2code.springmvc;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.Optional;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,12 +44,24 @@ public class StudentGradeServiceTest {
 		assertEquals("bhaksar@gmail.com", student.getEmailAddress());
 
 	}
-	
-	
+
 	@Test
 	public void checkStudentExist() {
 		assertTrue(service.checkStudentIsNull(1));
 		assertFalse(service.checkStudentIsNull(0));
+	}
+
+	@Test
+	public void deleteStudents() {
+		Optional<CollegeStudent> deletedStudent = repo.findById(1);
+
+		assertTrue(deletedStudent.isPresent());
+
+		service.deleteStudent(1);
+		
+		deletedStudent = repo.findById(1);
+
+		assertFalse(deletedStudent.isPresent());
 	}
 
 	@AfterEach
