@@ -1,5 +1,8 @@
 package com.luv2code.springmvc.service;
 
+import java.util.Optional;
+import java.util.function.BooleanSupplier;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +21,20 @@ public class StudentAndGradeService {
 	public void createStudent(String firstName, String lastName, String email) {
 
 		CollegeStudent studnet = new CollegeStudent(firstName, lastName, email);
+		studnet.setId(0);
 		repo.save(studnet);
+	}
+
+	public Boolean checkStudentIsNull(int id) {
+		
+		Optional<CollegeStudent> byId = repo.findById(id);
+		
+		if (byId.isEmpty()) {
+			return false;
+			
+		}else{
+			return true;
+		}
 	}
 
 }
