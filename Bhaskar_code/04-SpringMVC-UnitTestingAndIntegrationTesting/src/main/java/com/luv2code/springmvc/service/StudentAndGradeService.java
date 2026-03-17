@@ -1,7 +1,6 @@
 package com.luv2code.springmvc.service;
 
 import java.util.Optional;
-import java.util.function.BooleanSupplier;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -116,6 +115,46 @@ public class StudentAndGradeService {
 		}
 
 		return false;
+	}
+
+	public Integer deleteGrade(int gradeId, String gradeType) {
+		int studentId = 0;
+
+		if (gradeType.equals("math")) {
+
+			Optional<MathGrade> gradeData = mathGradeDao.findById(gradeId);
+
+			if (gradeData.isEmpty()) {
+				return studentId;
+			}
+
+			studentId = gradeData.get().getStudentId();
+			mathGradeDao.deleteById(gradeId);
+
+		}
+		if (gradeType.equals("science")) {
+			Optional<ScienceGrade> gradeData = scienceGradeDao.findById(gradeId);
+
+			if (gradeData.isEmpty()) {
+				return studentId;
+			}
+
+			studentId = gradeData.get().getStudentId();
+			scienceGradeDao.deleteById(gradeId);
+
+		}
+		if (gradeType.equals("history")) {
+			Optional<HistoryGrade> gradeData = historyGradeDao.findById(gradeId);
+
+			if (gradeData.isEmpty()) {
+				return studentId;
+			}
+
+			studentId = gradeData.get().getStudentId();
+			historyGradeDao.deleteById(gradeId);
+
+		}
+		return studentId;
 	}
 
 }

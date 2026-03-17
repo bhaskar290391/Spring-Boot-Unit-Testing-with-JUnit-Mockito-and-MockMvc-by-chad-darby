@@ -132,6 +132,14 @@ public class StudentGradeServiceTest {
 		assertFalse(service.createGrade(85.0, 1, "literature"));
 
 	}
+	
+	@Test
+	public void deleteGradeService() {
+		
+		assertEquals(1, service.deleteGrade(1,"math"));
+		assertEquals(1, service.deleteGrade(1,"science"));
+		assertEquals(1, service.deleteGrade(1,"history"));
+	}
 
 	@AfterEach
 	public void cleanUpDatabase() {
