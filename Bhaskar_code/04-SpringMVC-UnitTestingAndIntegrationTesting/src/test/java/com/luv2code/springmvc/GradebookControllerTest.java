@@ -15,6 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -49,6 +50,26 @@ public class GradebookControllerTest {
 
 	@Autowired
 	private StudentDao studentDao;
+	
+	@Value("${sql.scripts.create.student}")
+	private String createStudent;
+
+	@Value("${sql.scripts.create.math.grade}")
+	private String createMathGrade;
+	@Value("${sql.scripts.create.science.grade}")
+	private String createScienceGrade;
+	@Value("${sql.scripts.create.history.grade}")
+	private String createHistoryGrade;
+
+	@Value("${sql.scripts.delete.student}")
+	private String deleteStudent;
+
+	@Value("${sql.scripts.delete.math.grade}")
+	private String deleteMathGrade;
+	@Value("${sql.scripts.delete.science.grade}")
+	private String deleteScienceGrade;
+	@Value("${sql.scripts.delete.history.grade}")
+	private String deleteHistoryGrade;
 
 	@BeforeAll
 	public static void requestSetup() {
@@ -60,8 +81,11 @@ public class GradebookControllerTest {
 
 	@BeforeEach
 	public void setupDatabase() {
-		template.execute(
-				"insert into student(firstname,lastname,email_address) values ('bhaskar','mudaliyar','kanishk@gmail,com')");
+		template.execute(createStudent);
+
+		template.execute(createMathGrade);
+		template.execute(createScienceGrade);
+		template.execute(createHistoryGrade);
 	}
 
 	@Test
@@ -131,7 +155,9 @@ public class GradebookControllerTest {
 
 	@AfterEach
 	public void cleanUpDatabase() {
-		template.execute("delete from student ");
-		template.execute("alter table student alter column id restart with 1");
+		template.execute(deleteStudent);
+		template.execute(deleteHistoryGrade);
+		template.execute(deleteMathGrade);
+		template.execute(deleteScienceGrade);
 	}
 }

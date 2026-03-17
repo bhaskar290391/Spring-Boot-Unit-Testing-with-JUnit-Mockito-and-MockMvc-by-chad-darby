@@ -11,6 +11,7 @@ import java.util.Optional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.TestPropertySource;
@@ -49,14 +50,33 @@ public class StudentGradeServiceTest {
 	@Autowired
 	private HistoryGradeDao historyGradeDao;
 
+	@Value("${sql.scripts.create.student}")
+	private String createStudent;
+
+	@Value("${sql.scripts.create.math.grade}")
+	private String createMathGrade;
+	@Value("${sql.scripts.create.science.grade}")
+	private String createScienceGrade;
+	@Value("${sql.scripts.create.history.grade}")
+	private String createHistoryGrade;
+
+	@Value("${sql.scripts.delete.student}")
+	private String deleteStudent;
+
+	@Value("${sql.scripts.delete.math.grade}")
+	private String deleteMathGrade;
+	@Value("${sql.scripts.delete.science.grade}")
+	private String deleteScienceGrade;
+	@Value("${sql.scripts.delete.history.grade}")
+	private String deleteHistoryGrade;
+
 	@BeforeEach
 	public void setupDatabase() {
-		template.execute(
-				"insert into student(firstname,lastname,email_address) values ('bhaskar','mudaliyar','bhaskar@gmail.com')");
+		template.execute(createStudent);
 
-		template.execute("insert into math_grade(student_id,grade) values (1,85.0)");
-		template.execute("insert into science_grade(student_id,grade) values (1,85.0)");
-		template.execute("insert into history_grade(student_id,grade) values (1,85.0)");
+		template.execute(createMathGrade);
+		template.execute(createScienceGrade);
+		template.execute(createHistoryGrade);
 	}
 
 	@Test
@@ -161,39 +181,34 @@ public class StudentGradeServiceTest {
 		assertEquals(0, service.deleteGrade(1, "Literature"));
 
 	}
-	
-	
-	@Test 
+
+	@Test
 	public void studentInformation() {
-		GradebookCollegeStudent student= service.studentInformation(1);
+		GradebookCollegeStudent student = service.studentInformation(1);
 		assertNotNull(student);
 		assertEquals(1, student.getId());
 		assertEquals("bhaskar", student.getFirstname());
 		assertEquals("mudaliyar", student.getLastname());
 		assertEquals("bhaskar@gmail.com", student.getEmailAddress());
-		assertTrue(student.getStudentGrades().getHistoryGradeResults().size() ==1);
-		assertTrue(student.getStudentGrades().getMathGradeResults().size() ==1);
-		assertTrue(student.getStudentGrades().getScienceGradeResults().size() ==1);
+		assertTrue(student.getStudentGrades().getHistoryGradeResults().size() == 1);
+		assertTrue(student.getStudentGrades().getMathGradeResults().size() == 1);
+		assertTrue(student.getStudentGrades().getScienceGradeResults().size() == 1);
 	}
-	
-	
-	@Test 
+
+	@Test
 	public void studentInformationForInvalidStudent() {
-		GradebookCollegeStudent student= service.studentInformation(0);
+		GradebookCollegeStudent student = service.studentInformation(0);
 		assertNull(student);
-		
+
 	}
 
 	@AfterEach
 	public void cleanUpDatabase() {
-		template.execute("delete from student ");
-		template.execute("delete from math_grade ");
-		template.execute("delete from science_grade ");
-		template.execute("delete from history_grade ");
+		template.execute(deleteStudent);
+		template.execute(deleteHistoryGrade);
+		template.execute(deleteMathGrade);
+		template.execute(deleteScienceGrade);
 
-		template.execute("alter table student alter column id restart with 1");
-		template.execute("alter table math_grade alter column id restart with 1");
-		template.execute("alter table science_grade alter column id restart with 1");
-		template.execute("alter table history_grade alter column id restart with 1");
+		
 	}
 }
