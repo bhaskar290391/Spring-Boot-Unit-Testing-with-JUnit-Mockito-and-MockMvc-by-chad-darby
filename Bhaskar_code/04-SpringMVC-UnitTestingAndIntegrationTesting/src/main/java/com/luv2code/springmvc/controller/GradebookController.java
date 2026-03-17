@@ -71,31 +71,12 @@ public class GradebookController {
 			return "error";
 		}
 
-		GradebookCollegeStudent studentInformation = service.studentInformation(id);
-
-		if (studentInformation.getStudentGrades().getMathGradeResults().size() > 0) {
-			m.addAttribute("mathAverage", studentInformation.getStudentGrades()
-					.findGradePointAverage(studentInformation.getStudentGrades().getMathGradeResults()));
-		} else {
-			m.addAttribute("mathAverage", "N/A");
-		}
-
-		if (studentInformation.getStudentGrades().getScienceGradeResults().size() > 0) {
-			m.addAttribute("scienceAverage", studentInformation.getStudentGrades()
-					.findGradePointAverage(studentInformation.getStudentGrades().getScienceGradeResults()));
-		} else {
-			m.addAttribute("scienceAverage", "N/A");
-		}
-
-		if (studentInformation.getStudentGrades().getHistoryGradeResults().size() > 0) {
-			m.addAttribute("historyAverage", studentInformation.getStudentGrades()
-					.findGradePointAverage(studentInformation.getStudentGrades().getHistoryGradeResults()));
-		} else {
-			m.addAttribute("historyAverage", "N/A");
-		}
+		service.configureStudentInformation(id, m);
 
 		return "studentInformation";
 	}
+
+
 
 	@PostMapping("/grades")
 	public String createGrade(@RequestParam("grade") double grade, @RequestParam("gradeType") String gradeType,
@@ -109,28 +90,7 @@ public class GradebookController {
 		if (!success) {
 			return "error";
 		}
-		GradebookCollegeStudent studentInformation = service.studentInformation(studentId);
-
-		if (studentInformation.getStudentGrades().getMathGradeResults().size() > 0) {
-			m.addAttribute("mathAverage", studentInformation.getStudentGrades()
-					.findGradePointAverage(studentInformation.getStudentGrades().getMathGradeResults()));
-		} else {
-			m.addAttribute("mathAverage", "N/A");
-		}
-
-		if (studentInformation.getStudentGrades().getScienceGradeResults().size() > 0) {
-			m.addAttribute("scienceAverage", studentInformation.getStudentGrades()
-					.findGradePointAverage(studentInformation.getStudentGrades().getScienceGradeResults()));
-		} else {
-			m.addAttribute("scienceAverage", "N/A");
-		}
-
-		if (studentInformation.getStudentGrades().getHistoryGradeResults().size() > 0) {
-			m.addAttribute("historyAverage", studentInformation.getStudentGrades()
-					.findGradePointAverage(studentInformation.getStudentGrades().getHistoryGradeResults()));
-		} else {
-			m.addAttribute("historyAverage", "N/A");
-		}
+		service.configureStudentInformation(studentId, m);
 
 		return "studentInformation";
 	}

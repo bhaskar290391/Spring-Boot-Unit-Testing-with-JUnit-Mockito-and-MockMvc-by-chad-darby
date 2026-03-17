@@ -205,6 +205,37 @@ public class GradebookControllerTest {
 
 	}
 
+	@Test
+	public void createGradeWithInvalidStudent() throws Exception {
+
+		assertFalse(studentDao.findById(0).isPresent());
+
+		MvcResult mavData = mockMVC.perform(post("/grades").contentType(MediaType.APPLICATION_JSON)
+				.param("grade", "85.0").param("studentId", "0").param("gradeType", "math")).andExpect(status().isOk())
+				.andReturn();
+
+		ModelAndView datas = mavData.getModelAndView();
+
+		ModelAndViewAssert.assertViewName(datas, "error");
+
+	}
+	
+	
+	@Test
+	public void createGradeWithInvalidGrade() throws Exception {
+
+		assertFalse(studentDao.findById(0).isPresent());
+
+		MvcResult mavData = mockMVC.perform(post("/grades").contentType(MediaType.APPLICATION_JSON)
+				.param("grade", "85.0").param("studentId", "1").param("gradeType", "literature")).andExpect(status().isOk())
+				.andReturn();
+
+		ModelAndView datas = mavData.getModelAndView();
+
+		ModelAndViewAssert.assertViewName(datas, "error");
+
+	}
+
 	@AfterEach
 	public void cleanUpDatabase() {
 		template.execute(deleteStudent);
