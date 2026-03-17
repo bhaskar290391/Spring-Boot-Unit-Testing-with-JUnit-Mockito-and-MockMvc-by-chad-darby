@@ -50,14 +50,16 @@ public class GradebookControllerTest {
 
 	@Autowired
 	private StudentDao studentDao;
-	
+
 	@Value("${sql.scripts.create.student}")
 	private String createStudent;
 
 	@Value("${sql.scripts.create.math.grade}")
 	private String createMathGrade;
+
 	@Value("${sql.scripts.create.science.grade}")
 	private String createScienceGrade;
+
 	@Value("${sql.scripts.create.history.grade}")
 	private String createHistoryGrade;
 
@@ -66,8 +68,10 @@ public class GradebookControllerTest {
 
 	@Value("${sql.scripts.delete.math.grade}")
 	private String deleteMathGrade;
+
 	@Value("${sql.scripts.delete.science.grade}")
 	private String deleteScienceGrade;
+
 	@Value("${sql.scripts.delete.history.grade}")
 	private String deleteHistoryGrade;
 
@@ -151,6 +155,28 @@ public class GradebookControllerTest {
 
 		ModelAndViewAssert.assertViewName(datas, "error");
 
+	}
+
+	@Test
+	public void studentInformationWithExistingStudent() throws Exception {
+		assertTrue(studentDao.findById(1).isPresent());
+
+		MvcResult mavData = mockMVC.perform(MockMvcRequestBuilders.get("/studentInformation/{id}", 1))
+				.andExpect(status().isOk()).andReturn();
+		ModelAndView datas = mavData.getModelAndView();
+
+		ModelAndViewAssert.assertViewName(datas, "studentInformation");
+	}
+
+	@Test
+	public void studentInformationWithoutExistingStudent() throws Exception {
+		assertFalse(studentDao.findById(0).isPresent());
+
+		MvcResult mavData = mockMVC.perform(MockMvcRequestBuilders.get("/studentInformation/{id}", 0))
+				.andExpect(status().isOk()).andReturn();
+		ModelAndView datas = mavData.getModelAndView();
+
+		ModelAndViewAssert.assertViewName(datas, "error");
 	}
 
 	@AfterEach
