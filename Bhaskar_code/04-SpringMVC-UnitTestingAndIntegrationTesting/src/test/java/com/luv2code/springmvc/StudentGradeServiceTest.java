@@ -37,20 +37,24 @@ public class StudentGradeServiceTest {
 
 	@Autowired
 	private JdbcTemplate template;
-	
+
 	@Autowired
 	private MathGradeDao mathGradeDao;
-	
+
 	@Autowired
 	private ScienceGradeDao scienceGradeDao;
-	
+
 	@Autowired
 	private HistoryGradeDao historyGradeDao;
-	
+
 	@BeforeEach
 	public void setupDatabase() {
 		template.execute(
 				"insert into student(firstname,lastname,email_address) values ('bhaskar','mudaliyar','kanishk@gmail,com')");
+
+		template.execute("insert into math_grade(id,grade) values (2,85.0)");
+		template.execute("insert into science_grade(id,grade) values (2,85.0)");
+		template.execute("insert into history_grade(id,grade) values (2,85.0)");
 	}
 
 	@Test
@@ -76,51 +80,66 @@ public class StudentGradeServiceTest {
 		assertTrue(deletedStudent.isPresent());
 
 		service.deleteStudent(1);
-		
+
 		deletedStudent = repo.findById(1);
 
 		assertFalse(deletedStudent.isPresent());
 	}
-	
+
 	@Sql("/insert-data.sql")
 	@Test
 	public void checkNumberOfStudents() {
-		
+
 		Iterable<CollegeStudent> gradeBook = service.getGradeBook();
-		
-		List<CollegeStudent> data=new ArrayList<>();
-		
-		
+
+		List<CollegeStudent> data = new ArrayList<>();
+
 		for (CollegeStudent collegeStudent : gradeBook) {
 			data.add(collegeStudent);
-			
+
 		}
-		
+
 		assertEquals(5, data.size());
 	}
-	
-	
+
 	@Test
 	public void createGrade() {
-		
-		assertTrue(service.createGrade(85.0,1,"math"));
-		assertTrue(service.createGrade(85.0,1,"science"));
-		assertTrue(service.createGrade(85.0,1,"history"));
-		
-		Iterable<MathGrade> mathData=mathGradeDao.findGradeByStudentId(1);
-		Iterable<ScienceGrade> scienceData=scienceGradeDao.findGradeByStudentId(1);
-		Iterable<HistoryGrade> historyData=historyGradeDao.findGradeByStudentId(1);
-		
+
+		assertTrue(service.createGrade(85.0, 1, "math"));
+		assertTrue(service.createGrade(85.0, 1, "science"));
+		assertTrue(service.createGrade(85.0, 1, "history"));
+
+		Iterable<MathGrade> mathData = mathGradeDao.findGradeByStudentId(1);
+		Iterable<ScienceGrade> scienceData = scienceGradeDao.findGradeByStudentId(1);
+		Iterable<HistoryGrade> historyData = historyGradeDao.findGradeByStudentId(1);
+
 		assertTrue(mathData.iterator().hasNext());
 		assertTrue(scienceData.iterator().hasNext());
 		assertTrue(historyData.iterator().hasNext());
-		
-		
+
+	}
+
+	@Test
+	public void createGradeFailingTest() {
+
+		assertFalse(service.createGrade(105, 1, "math"));
+		assertFalse(service.createGrade(-5, 1, "math"));
+		assertFalse(service.createGrade(85.0, 2, "history"));
+		assertFalse(service.createGrade(85.0, 1, "literature"));
+
 	}
 
 	@AfterEach
 	public void cleanUpDatabase() {
 		template.execute("delete from student ");
+		template.execute("delete from math_grade ");
+		template.execute("delete from science_grade ");
+		template.execute("delete from history_grade ");
+		
+		
 		template.execute("alter table student alter column id restart with 1");
+		template.execute("alter table math_grade alter column id restart with 1");
+		template.execute("alter table science_grade alter column id restart with 1");
+		template.execute("alter table history_grade alter column id restart with 1");
 	}
 }
