@@ -6,4 +6,6 @@ import com.luv2code.springmvc.models.HistoryGrade;
 
 public interface HistoryGradeDao extends JpaRepository<HistoryGrade, Integer> {
 	Iterable<HistoryGrade> findGradeByStudentId(int id);
+
+	void deleteByStudentId(int id);
 }

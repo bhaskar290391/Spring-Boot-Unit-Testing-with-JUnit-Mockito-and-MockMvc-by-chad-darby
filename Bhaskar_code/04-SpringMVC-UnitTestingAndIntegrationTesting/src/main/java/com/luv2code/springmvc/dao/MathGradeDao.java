@@ -8,4 +8,6 @@ public interface MathGradeDao extends JpaRepository<MathGrade, Integer> {
 
 	Iterable<MathGrade> findGradeByStudentId(int id);
 
+	void deleteByStudentId(int id);
+
 }

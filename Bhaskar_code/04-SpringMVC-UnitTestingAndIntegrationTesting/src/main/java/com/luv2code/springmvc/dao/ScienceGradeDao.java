@@ -7,4 +7,6 @@ import com.luv2code.springmvc.models.ScienceGrade;
 public interface ScienceGradeDao extends JpaRepository<ScienceGrade, Integer> {
 
 	Iterable<ScienceGrade> findGradeByStudentId(int id);
+
+	void deleteByStudentId(int id);
 }
