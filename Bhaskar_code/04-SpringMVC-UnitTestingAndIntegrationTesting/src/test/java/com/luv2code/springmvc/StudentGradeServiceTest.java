@@ -132,13 +132,21 @@ public class StudentGradeServiceTest {
 		assertFalse(service.createGrade(85.0, 1, "literature"));
 
 	}
-	
+
 	@Test
 	public void deleteGradeService() {
-		
-		assertEquals(1, service.deleteGrade(1,"math"));
-		assertEquals(1, service.deleteGrade(1,"science"));
-		assertEquals(1, service.deleteGrade(1,"history"));
+
+		assertEquals(1, service.deleteGrade(1, "math"));
+		assertEquals(1, service.deleteGrade(1, "science"));
+		assertEquals(1, service.deleteGrade(1, "history"));
+	}
+
+	@Test
+	public void deleteGradeServiceForInvalidGradeIdAndGradeType() {
+
+		assertEquals(0, service.deleteGrade(0, "math"));
+		assertEquals(0, service.deleteGrade(1, "Literature"));
+
 	}
 
 	@AfterEach
