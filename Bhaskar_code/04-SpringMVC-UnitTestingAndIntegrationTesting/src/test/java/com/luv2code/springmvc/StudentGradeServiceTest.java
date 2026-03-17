@@ -21,6 +21,7 @@ import com.luv2code.springmvc.dao.MathGradeDao;
 import com.luv2code.springmvc.dao.ScienceGradeDao;
 import com.luv2code.springmvc.dao.StudentDao;
 import com.luv2code.springmvc.models.CollegeStudent;
+import com.luv2code.springmvc.models.GradebookCollegeStudent;
 import com.luv2code.springmvc.models.HistoryGrade;
 import com.luv2code.springmvc.models.MathGrade;
 import com.luv2code.springmvc.models.ScienceGrade;
@@ -51,7 +52,7 @@ public class StudentGradeServiceTest {
 	@BeforeEach
 	public void setupDatabase() {
 		template.execute(
-				"insert into student(firstname,lastname,email_address) values ('bhaskar','mudaliyar','kanishk@gmail,com')");
+				"insert into student(firstname,lastname,email_address) values ('bhaskar','mudaliyar','bhaskar@gmail.com')");
 
 		template.execute("insert into math_grade(student_id,grade) values (1,85.0)");
 		template.execute("insert into science_grade(student_id,grade) values (1,85.0)");
@@ -159,6 +160,28 @@ public class StudentGradeServiceTest {
 		assertEquals(0, service.deleteGrade(0, "math"));
 		assertEquals(0, service.deleteGrade(1, "Literature"));
 
+	}
+	
+	
+	@Test 
+	public void studentInformation() {
+		GradebookCollegeStudent student= service.studentInformation(1);
+		assertNotNull(student);
+		assertEquals(1, student.getId());
+		assertEquals("bhaskar", student.getFirstname());
+		assertEquals("mudaliyar", student.getLastname());
+		assertEquals("bhaskar@gmail.com", student.getEmailAddress());
+		assertTrue(student.getStudentGrades().getHistoryGradeResults().size() ==1);
+		assertTrue(student.getStudentGrades().getMathGradeResults().size() ==1);
+		assertTrue(student.getStudentGrades().getScienceGradeResults().size() ==1);
+	}
+	
+	
+	@Test 
+	public void studentInformationForInvalidStudent() {
+		GradebookCollegeStudent student= service.studentInformation(0);
+		assertNull(student);
+		
 	}
 
 	@AfterEach
