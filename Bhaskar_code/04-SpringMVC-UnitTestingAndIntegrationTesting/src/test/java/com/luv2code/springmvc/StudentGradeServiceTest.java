@@ -15,10 +15,14 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 
+import com.luv2code.springmvc.dao.HistoryGradeDao;
 import com.luv2code.springmvc.dao.MathGradeDao;
+import com.luv2code.springmvc.dao.ScienceGradeDao;
 import com.luv2code.springmvc.dao.StudentDao;
 import com.luv2code.springmvc.models.CollegeStudent;
+import com.luv2code.springmvc.models.HistoryGrade;
 import com.luv2code.springmvc.models.MathGrade;
+import com.luv2code.springmvc.models.ScienceGrade;
 import com.luv2code.springmvc.service.StudentAndGradeService;
 
 @SpringBootTest
@@ -36,6 +40,12 @@ public class StudentGradeServiceTest {
 	
 	@Autowired
 	private MathGradeDao mathGradeDao;
+	
+	@Autowired
+	private ScienceGradeDao scienceGradeDao;
+	
+	@Autowired
+	private HistoryGradeDao historyGradeDao;
 	
 	@BeforeEach
 	public void setupDatabase() {
@@ -94,10 +104,16 @@ public class StudentGradeServiceTest {
 	public void createGrade() {
 		
 		assertTrue(service.createGrade(85.0,1,"math"));
+		assertTrue(service.createGrade(85.0,1,"science"));
+		assertTrue(service.createGrade(85.0,1,"history"));
 		
 		Iterable<MathGrade> mathData=mathGradeDao.findGradeByStudentId(1);
+		Iterable<ScienceGrade> scienceData=scienceGradeDao.findGradeByStudentId(1);
+		Iterable<HistoryGrade> historyData=historyGradeDao.findGradeByStudentId(1);
 		
 		assertTrue(mathData.iterator().hasNext());
+		assertTrue(scienceData.iterator().hasNext());
+		assertTrue(historyData.iterator().hasNext());
 		
 		
 	}

@@ -6,10 +6,15 @@ import java.util.function.BooleanSupplier;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+
+import com.luv2code.springmvc.dao.HistoryGradeDao;
 import com.luv2code.springmvc.dao.MathGradeDao;
+import com.luv2code.springmvc.dao.ScienceGradeDao;
 import com.luv2code.springmvc.dao.StudentDao;
 import com.luv2code.springmvc.models.CollegeStudent;
+import com.luv2code.springmvc.models.HistoryGrade;
 import com.luv2code.springmvc.models.MathGrade;
+import com.luv2code.springmvc.models.ScienceGrade;
 
 import jakarta.transaction.Transactional;
 
@@ -17,18 +22,29 @@ import jakarta.transaction.Transactional;
 @Transactional
 public class StudentAndGradeService {
 
-    private final MathGradeDao mathGradeDao;
+	@Autowired
+	private MathGradeDao mathGradeDao;
+
+	@Autowired
+	private ScienceGradeDao scienceGradeDao;
+
+	@Autowired
+	private HistoryGradeDao historyGradeDao;
 
 	@Autowired
 	private StudentDao repo;
-	
+
 	@Autowired
 	@Qualifier("mathGrades")
 	private MathGrade mathGrade;
 
-    StudentAndGradeService(MathGradeDao mathGradeDao) {
-        this.mathGradeDao = mathGradeDao;
-    }
+	@Autowired
+	@Qualifier("scienceGrades")
+	private ScienceGrade scienceGrade;
+
+	@Autowired
+	@Qualifier("historyGrades")
+	private HistoryGrade historyGrade;
 
 	public void createStudent(String firstName, String lastName, String email) {
 
@@ -64,23 +80,41 @@ public class StudentAndGradeService {
 	}
 
 	public Boolean createGrade(double grade, int studentId, String gradeType) {
-		
-		if(!checkStudentIsNull(studentId)) {
+
+		if (!checkStudentIsNull(studentId)) {
 			return false;
 		}
-		
-		if(grade >=0.0 && grade<= 100.0) {
-			
-			if(gradeType.equals("math")) {
+
+		if (grade >= 0.0 && grade <= 100.0) {
+
+			if (gradeType.equals("math")) {
 				mathGrade.setId(0);
 				mathGrade.setStudentId(studentId);
 				mathGrade.setGrade(grade);
 				mathGradeDao.save(mathGrade);
 				return true;
-				
+
+			}
+
+			if (gradeType.equals("science")) {
+				scienceGrade.setId(0);
+				scienceGrade.setStudentId(studentId);
+				scienceGrade.setGrade(grade);
+				scienceGradeDao.save(scienceGrade);
+				return true;
+
+			}
+
+			if (gradeType.equals("history")) {
+				historyGrade.setId(0);
+				historyGrade.setStudentId(studentId);
+				historyGrade.setGrade(grade);
+				historyGradeDao.save(historyGrade);
+				return true;
+
 			}
 		}
-		
+
 		return false;
 	}
 
