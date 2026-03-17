@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.luv2code.springmvc.models.*;
 import com.luv2code.springmvc.service.StudentAndGradeService;
@@ -71,6 +72,44 @@ public class GradebookController {
 		}
 
 		GradebookCollegeStudent studentInformation = service.studentInformation(id);
+
+		if (studentInformation.getStudentGrades().getMathGradeResults().size() > 0) {
+			m.addAttribute("mathAverage", studentInformation.getStudentGrades()
+					.findGradePointAverage(studentInformation.getStudentGrades().getMathGradeResults()));
+		} else {
+			m.addAttribute("mathAverage", "N/A");
+		}
+
+		if (studentInformation.getStudentGrades().getScienceGradeResults().size() > 0) {
+			m.addAttribute("scienceAverage", studentInformation.getStudentGrades()
+					.findGradePointAverage(studentInformation.getStudentGrades().getScienceGradeResults()));
+		} else {
+			m.addAttribute("scienceAverage", "N/A");
+		}
+
+		if (studentInformation.getStudentGrades().getHistoryGradeResults().size() > 0) {
+			m.addAttribute("historyAverage", studentInformation.getStudentGrades()
+					.findGradePointAverage(studentInformation.getStudentGrades().getHistoryGradeResults()));
+		} else {
+			m.addAttribute("historyAverage", "N/A");
+		}
+
+		return "studentInformation";
+	}
+
+	@PostMapping("/grades")
+	public String createGrade(@RequestParam("grade") double grade, @RequestParam("gradeType") String gradeType,
+			@RequestParam("studentId") int studentId, Model m) {
+
+		if (!service.checkStudentIsNull(studentId)) {
+			return "error";
+		}
+
+		Boolean success = service.createGrade(grade, studentId, gradeType);
+		if (!success) {
+			return "error";
+		}
+		GradebookCollegeStudent studentInformation = service.studentInformation(studentId);
 
 		if (studentInformation.getStudentGrades().getMathGradeResults().size() > 0) {
 			m.addAttribute("mathAverage", studentInformation.getStudentGrades()

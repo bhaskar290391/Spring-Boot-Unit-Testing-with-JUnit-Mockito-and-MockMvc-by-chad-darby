@@ -49,6 +49,9 @@ public class GradebookControllerTest {
 	private StudentAndGradeService studentCreateServiceMock;
 
 	@Autowired
+	private StudentAndGradeService studentService;
+
+	@Autowired
 	private StudentDao studentDao;
 
 	@Value("${sql.scripts.create.student}")
@@ -177,6 +180,29 @@ public class GradebookControllerTest {
 		ModelAndView datas = mavData.getModelAndView();
 
 		ModelAndViewAssert.assertViewName(datas, "error");
+	}
+
+	@Test
+	public void createGrade() throws Exception {
+
+		assertTrue(studentDao.findById(1).isPresent());
+
+		GradebookCollegeStudent studentInformation = studentService.studentInformation(1);
+
+		assertEquals(1, studentInformation.getStudentGrades().getMathGradeResults().size());
+
+		MvcResult mavData = mockMVC.perform(post("/grades").contentType(MediaType.APPLICATION_JSON)
+				.param("grade", "85.0").param("studentId", "1").param("gradeType", "math")).andExpect(status().isOk())
+				.andReturn();
+
+		ModelAndView datas = mavData.getModelAndView();
+
+		ModelAndViewAssert.assertViewName(datas, "studentInformation");
+
+		studentInformation = studentService.studentInformation(1);
+
+		assertEquals(2, studentInformation.getStudentGrades().getMathGradeResults().size());
+
 	}
 
 	@AfterEach
