@@ -15,8 +15,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 
+import com.luv2code.springmvc.dao.MathGradeDao;
 import com.luv2code.springmvc.dao.StudentDao;
 import com.luv2code.springmvc.models.CollegeStudent;
+import com.luv2code.springmvc.models.MathGrade;
 import com.luv2code.springmvc.service.StudentAndGradeService;
 
 @SpringBootTest
@@ -31,7 +33,10 @@ public class StudentGradeServiceTest {
 
 	@Autowired
 	private JdbcTemplate template;
-
+	
+	@Autowired
+	private MathGradeDao mathGradeDao;
+	
 	@BeforeEach
 	public void setupDatabase() {
 		template.execute(
@@ -82,6 +87,19 @@ public class StudentGradeServiceTest {
 		}
 		
 		assertEquals(5, data.size());
+	}
+	
+	
+	@Test
+	public void createGrade() {
+		
+		assertTrue(service.createGrade(85.0,1,"math"));
+		
+		Iterable<MathGrade> mathData=mathGradeDao.findGradeByStudentId(1);
+		
+		assertTrue(mathData.iterator().hasNext());
+		
+		
 	}
 
 	@AfterEach
