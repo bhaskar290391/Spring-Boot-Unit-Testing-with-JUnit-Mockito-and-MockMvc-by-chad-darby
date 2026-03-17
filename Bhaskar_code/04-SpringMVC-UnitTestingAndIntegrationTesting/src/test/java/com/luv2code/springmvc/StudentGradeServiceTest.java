@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,9 +53,9 @@ public class StudentGradeServiceTest {
 		template.execute(
 				"insert into student(firstname,lastname,email_address) values ('bhaskar','mudaliyar','kanishk@gmail,com')");
 
-		template.execute("insert into math_grade(id,grade) values (2,85.0)");
-		template.execute("insert into science_grade(id,grade) values (2,85.0)");
-		template.execute("insert into history_grade(id,grade) values (2,85.0)");
+		template.execute("insert into math_grade(student_id,grade) values (1,85.0)");
+		template.execute("insert into science_grade(student_id,grade) values (1,85.0)");
+		template.execute("insert into history_grade(student_id,grade) values (1,85.0)");
 	}
 
 	@Test
@@ -117,6 +118,9 @@ public class StudentGradeServiceTest {
 		assertTrue(scienceData.iterator().hasNext());
 		assertTrue(historyData.iterator().hasNext());
 
+		assertTrue(((Collection<MathGrade>) mathData).size() == 2);
+		assertTrue(((Collection<ScienceGrade>) scienceData).size() == 2);
+		assertTrue(((Collection<HistoryGrade>) historyData).size() == 2);
 	}
 
 	@Test
@@ -135,8 +139,7 @@ public class StudentGradeServiceTest {
 		template.execute("delete from math_grade ");
 		template.execute("delete from science_grade ");
 		template.execute("delete from history_grade ");
-		
-		
+
 		template.execute("alter table student alter column id restart with 1");
 		template.execute("alter table math_grade alter column id restart with 1");
 		template.execute("alter table science_grade alter column id restart with 1");
