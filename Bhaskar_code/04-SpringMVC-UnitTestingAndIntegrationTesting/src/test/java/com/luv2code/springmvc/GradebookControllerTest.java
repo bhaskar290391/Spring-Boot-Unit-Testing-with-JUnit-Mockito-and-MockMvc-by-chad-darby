@@ -36,7 +36,7 @@ import com.luv2code.springmvc.service.StudentAndGradeService;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@TestPropertySource("/application.properties")
+@TestPropertySource("/application-test.properties")
 public class GradebookControllerTest {
 	@Autowired
 	private JdbcTemplate template;
@@ -143,7 +143,7 @@ public class GradebookControllerTest {
 	@Test
 	public void deleteStudent() throws Exception {
 		assertTrue(studentDao.findById(1).isPresent());
-		MvcResult mavData = mockMVC.perform(MockMvcRequestBuilders.get("/student/delete/{id}", 1))
+		MvcResult mavData = mockMVC.perform(MockMvcRequestBuilders.get("/delete/student/{id}", 1))
 				.andExpect(status().isOk()).andReturn();
 		ModelAndView datas = mavData.getModelAndView();
 
@@ -156,7 +156,7 @@ public class GradebookControllerTest {
 	@Test
 	public void deleteStudentForerrorPage() throws Exception {
 
-		MvcResult mavData = mockMVC.perform(MockMvcRequestBuilders.get("/student/delete/{id}", 0))
+		MvcResult mavData = mockMVC.perform(MockMvcRequestBuilders.get("/delete/student/{id}", 0))
 				.andExpect(status().isOk()).andReturn();
 		ModelAndView datas = mavData.getModelAndView();
 

@@ -29,7 +29,7 @@ import com.luv2code.springmvc.models.ScienceGrade;
 import com.luv2code.springmvc.service.StudentAndGradeService;
 
 @SpringBootTest
-@TestPropertySource("/application.properties")
+@TestPropertySource("/application-test.properties")
 public class StudentGradeServiceTest {
 
 	@Autowired

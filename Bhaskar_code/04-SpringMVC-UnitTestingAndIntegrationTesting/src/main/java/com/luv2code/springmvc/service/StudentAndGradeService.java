@@ -198,28 +198,5 @@ public class StudentAndGradeService {
 		return gradebookCollegeStudent;
 	}
 
-	public void configureStudentInformation(int studentId, Model model) {
-		GradebookCollegeStudent studentInformation = studentInformation(studentId);
 
-		if (studentInformation.getStudentGrades().getMathGradeResults().size() > 0) {
-			model.addAttribute("mathAverage", studentInformation.getStudentGrades()
-					.findGradePointAverage(studentInformation.getStudentGrades().getMathGradeResults()));
-		} else {
-			model.addAttribute("mathAverage", "N/A");
-		}
-
-		if (studentInformation.getStudentGrades().getScienceGradeResults().size() > 0) {
-			model.addAttribute("scienceAverage", studentInformation.getStudentGrades()
-					.findGradePointAverage(studentInformation.getStudentGrades().getScienceGradeResults()));
-		} else {
-			model.addAttribute("scienceAverage", "N/A");
-		}
-
-		if (studentInformation.getStudentGrades().getHistoryGradeResults().size() > 0) {
-			model.addAttribute("historyAverage", studentInformation.getStudentGrades()
-					.findGradePointAverage(studentInformation.getStudentGrades().getHistoryGradeResults()));
-		} else {
-			model.addAttribute("historyAverage", "N/A");
-		}
-	}
 }
