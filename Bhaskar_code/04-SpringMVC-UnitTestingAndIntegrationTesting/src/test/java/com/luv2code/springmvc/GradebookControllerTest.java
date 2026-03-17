@@ -28,6 +28,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.luv2code.springmvc.dao.MathGradeDao;
 import com.luv2code.springmvc.dao.StudentDao;
 import com.luv2code.springmvc.models.CollegeStudent;
 import com.luv2code.springmvc.models.GradebookCollegeStudent;
@@ -77,6 +78,9 @@ public class GradebookControllerTest {
 
 	@Value("${sql.scripts.delete.history.grade}")
 	private String deleteHistoryGrade;
+
+	@Autowired
+	private MathGradeDao mathDao;
 
 	@BeforeAll
 	public static void requestSetup() {
@@ -219,17 +223,54 @@ public class GradebookControllerTest {
 		ModelAndViewAssert.assertViewName(datas, "error");
 
 	}
-	
-	
+
 	@Test
 	public void createGradeWithInvalidGrade() throws Exception {
 
 		assertFalse(studentDao.findById(0).isPresent());
 
-		MvcResult mavData = mockMVC.perform(post("/grades").contentType(MediaType.APPLICATION_JSON)
-				.param("grade", "85.0").param("studentId", "1").param("gradeType", "literature")).andExpect(status().isOk())
-				.andReturn();
+		MvcResult mavData = mockMVC
+				.perform(post("/grades").contentType(MediaType.APPLICATION_JSON).param("grade", "85.0")
+						.param("studentId", "1").param("gradeType", "literature"))
+				.andExpect(status().isOk()).andReturn();
 
+		ModelAndView datas = mavData.getModelAndView();
+
+		ModelAndViewAssert.assertViewName(datas, "error");
+
+	}
+
+	@Test
+	public void deleteGrade() throws Exception {
+		assertTrue(mathDao.findById(1).isPresent());
+		MvcResult mavData = mockMVC.perform(MockMvcRequestBuilders.get("/grades/{id}/{gradeType}", 1, "math"))
+				.andExpect(status().isOk()).andReturn();
+		ModelAndView datas = mavData.getModelAndView();
+
+		ModelAndViewAssert.assertViewName(datas, "studentInformation");
+
+		assertFalse(mathDao.findById(1).isPresent());
+
+	}
+
+	@Test
+	public void deleteGradeInvalidId() throws Exception {
+		assertFalse(mathDao.findById(0).isPresent());
+		MvcResult mavData = mockMVC.perform(MockMvcRequestBuilders.get("/grades/{id}/{gradeType}", 0, "math"))
+				.andExpect(status().isOk()).andReturn();
+		ModelAndView datas = mavData.getModelAndView();
+
+		ModelAndViewAssert.assertViewName(datas, "error");
+
+	}
+	
+	
+
+	@Test
+	public void deleteGradeInvalidSubject() throws Exception {
+		assertTrue(mathDao.findById(1).isPresent());
+		MvcResult mavData = mockMVC.perform(MockMvcRequestBuilders.get("/grades/{id}/{gradeType}", 1, "literature"))
+				.andExpect(status().isOk()).andReturn();
 		ModelAndView datas = mavData.getModelAndView();
 
 		ModelAndViewAssert.assertViewName(datas, "error");
