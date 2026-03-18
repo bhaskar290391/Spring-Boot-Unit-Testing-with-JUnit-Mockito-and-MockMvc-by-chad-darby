@@ -10,11 +10,17 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 
 //@DisplayNameGeneration(DisplayNameGenerator.Simple.class)
 //@DisplayNameGeneration(DisplayNameGenerator.IndicativeSentences.class)
 //@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+
+//@TestMethodOrder(MethodOrderer.DisplayName.class)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class DemoUtilTest {
 
 	private DemoUtils utils;
@@ -44,6 +50,7 @@ public class DemoUtilTest {
 	}
 
 	@Test
+	@Order(1)
 	@DisplayName("Equals and Not Equals")
 	public void checkEqualsAndNotEquals() {
 		System.out.println("Test : checkEqualsAndNotEquals");
@@ -53,6 +60,7 @@ public class DemoUtilTest {
 	}
 
 	@Test
+	@Order(2)
 	@DisplayName("Null and Not Null")
 	public void check_Null_And_NotNulls() {
 		System.out.println("Test : checkNullAndNotNotNulls");
@@ -63,6 +71,7 @@ public class DemoUtilTest {
 	}
 
 	@Test
+	@Order(3)
 	@DisplayName("Same and Not Same")
 	public void sameAndNotSame() {
 
@@ -72,6 +81,7 @@ public class DemoUtilTest {
 	}
 
 	@Test
+	@Order(4)
 	@DisplayName("True and False")
 	public void trueAndFalse() {
 		assertTrue(utils.isGreater(10, 5));
@@ -79,6 +89,7 @@ public class DemoUtilTest {
 	}
 
 	@Test
+	@Order(5)
 	@DisplayName("Arrays Equals")
 	public void arraysEquals() {
 		String[] str = { "A", "B", "C" };
@@ -86,6 +97,7 @@ public class DemoUtilTest {
 	}
 
 	@Test
+	@Order(5)
 	@DisplayName("Iterable Equals")
 	public void iterableEquals() {
 		List<String> data = List.of("luv", "2", "code");
@@ -93,6 +105,7 @@ public class DemoUtilTest {
 	}
 
 	@Test
+	@Order(6)
 	@DisplayName("Throws and Does Not Throws")
 	public void throwsDoesNotThrows() {
 		assertThrows(Exception.class, () -> {
@@ -104,9 +117,12 @@ public class DemoUtilTest {
 	}
 
 	@Test
+	@Order(7)
 	@DisplayName("Timeout")
 	public void checkout() {
-		assertTimeoutPreemptively(Duration.ofSeconds(3), ()->{utils.checkTimeout();});
+		assertTimeoutPreemptively(Duration.ofSeconds(3), () -> {
+			utils.checkTimeout();
+		});
 	}
 
 }
