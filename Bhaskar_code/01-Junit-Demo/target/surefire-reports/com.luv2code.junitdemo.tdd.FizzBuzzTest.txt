@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.luv2code.junitdemo.tdd.FizzBuzzTest
+-------------------------------------------------------------------------------
+Tests run: 169, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.481 s -- in com.luv2code.junitdemo.tdd.FizzBuzzTest
