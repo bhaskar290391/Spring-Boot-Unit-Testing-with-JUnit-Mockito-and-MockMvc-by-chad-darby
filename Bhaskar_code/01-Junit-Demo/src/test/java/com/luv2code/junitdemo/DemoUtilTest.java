@@ -1,17 +1,24 @@
 package com.luv2code.junitdemo;
 
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertIterableEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.List;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.DisplayNameGenerator;
-
+import org.junit.jupiter.api.Test;
 
 //@DisplayNameGeneration(DisplayNameGenerator.Simple.class)
 //@DisplayNameGeneration(DisplayNameGenerator.IndicativeSentences.class)
@@ -62,21 +69,35 @@ public class DemoUtilTest {
 		assertNull(utils.checkNull(str1));
 		assertNotNull(utils.checkNull(str2));
 	}
-	
+
 	@Test
 	@DisplayName("Same and Not Same")
 	public void sameAndNotSame() {
-		
-		String str="bhaskar";
+
+		String str = "bhaskar";
 		assertSame(utils.getAcademy(), utils.getAcademyDuplicate());
 		assertNotSame(utils.getAcademy(), str);
 	}
-	
-	
+
 	@Test
 	@DisplayName("True and False")
 	public void trueAndFalse() {
 		assertTrue(utils.isGreater(10, 5));
 		assertFalse(utils.isGreater(5, 15));
 	}
+
+	@Test
+	@DisplayName("Arrays Equals")
+	public void arraysEquals() {
+		String[] str = { "A", "B", "C" };
+		assertArrayEquals(utils.getFirstThreeLettersOfAlphabet(), str);
+	}
+
+	@Test
+	@DisplayName("Iterable Equals")
+	public void iterableEquals() {
+		List<String> data = List.of("luv", "2", "code");
+		assertIterableEquals(data, utils.getAcademyInList());
+	}
+
 }
