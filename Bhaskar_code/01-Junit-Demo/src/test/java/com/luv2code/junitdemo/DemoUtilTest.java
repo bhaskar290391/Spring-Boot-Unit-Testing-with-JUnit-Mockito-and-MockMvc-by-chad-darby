@@ -1,16 +1,8 @@
 package com.luv2code.junitdemo;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertIterableEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNotSame;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
+import java.time.Duration;
 import java.util.List;
 
 import org.junit.jupiter.api.AfterAll;
@@ -98,6 +90,23 @@ public class DemoUtilTest {
 	public void iterableEquals() {
 		List<String> data = List.of("luv", "2", "code");
 		assertIterableEquals(data, utils.getAcademyInList());
+	}
+
+	@Test
+	@DisplayName("Throws and Does Not Throws")
+	public void throwsDoesNotThrows() {
+		assertThrows(Exception.class, () -> {
+			utils.throwException(-1);
+		});
+		assertDoesNotThrow(() -> {
+			utils.throwException(1);
+		});
+	}
+
+	@Test
+	@DisplayName("Timeout")
+	public void checkout() {
+		assertTimeoutPreemptively(Duration.ofSeconds(3), ()->{utils.checkTimeout();});
 	}
 
 }
