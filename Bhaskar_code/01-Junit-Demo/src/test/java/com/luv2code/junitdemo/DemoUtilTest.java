@@ -8,7 +8,14 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
 
+
+//@DisplayNameGeneration(DisplayNameGenerator.Simple.class)
+//@DisplayNameGeneration(DisplayNameGenerator.IndicativeSentences.class)
+@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 public class DemoUtilTest {
 
 	private DemoUtils utils;
@@ -26,18 +33,19 @@ public class DemoUtilTest {
 		System.out.println();
 	}
 
-	
 	@BeforeAll
 	public static void beforeAllData() {
 		System.out.println("Before all test");
 		System.out.println();
 	}
-	
+
 	@AfterAll
 	public static void afterAllData() {
 		System.out.println("After all test");
 	}
+
 	@Test
+	//@DisplayName("Equals and Not Equals")
 	public void checkEqualsAndNotEquals() {
 		System.out.println("Test : checkEqualsAndNotEquals");
 		assertEquals(6, utils.add(2, 4), "is valid");
@@ -46,7 +54,8 @@ public class DemoUtilTest {
 	}
 
 	@Test
-	public void checkNullAndNotNotNulls() {
+	//@DisplayName("Null and Not Null")
+	public void check_Null_And_NotNulls() {
 		System.out.println("Test : checkNullAndNotNotNulls");
 		String str1 = null;
 		String str2 = "bhaskar";
