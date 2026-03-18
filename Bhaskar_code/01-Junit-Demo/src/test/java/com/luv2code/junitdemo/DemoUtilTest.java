@@ -15,7 +15,7 @@ import org.junit.jupiter.api.DisplayNameGenerator;
 
 //@DisplayNameGeneration(DisplayNameGenerator.Simple.class)
 //@DisplayNameGeneration(DisplayNameGenerator.IndicativeSentences.class)
-@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+//@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 public class DemoUtilTest {
 
 	private DemoUtils utils;
@@ -45,7 +45,7 @@ public class DemoUtilTest {
 	}
 
 	@Test
-	//@DisplayName("Equals and Not Equals")
+	@DisplayName("Equals and Not Equals")
 	public void checkEqualsAndNotEquals() {
 		System.out.println("Test : checkEqualsAndNotEquals");
 		assertEquals(6, utils.add(2, 4), "is valid");
@@ -54,12 +54,29 @@ public class DemoUtilTest {
 	}
 
 	@Test
-	//@DisplayName("Null and Not Null")
+	@DisplayName("Null and Not Null")
 	public void check_Null_And_NotNulls() {
 		System.out.println("Test : checkNullAndNotNotNulls");
 		String str1 = null;
 		String str2 = "bhaskar";
 		assertNull(utils.checkNull(str1));
 		assertNotNull(utils.checkNull(str2));
+	}
+	
+	@Test
+	@DisplayName("Same and Not Same")
+	public void sameAndNotSame() {
+		
+		String str="bhaskar";
+		assertSame(utils.getAcademy(), utils.getAcademyDuplicate());
+		assertNotSame(utils.getAcademy(), str);
+	}
+	
+	
+	@Test
+	@DisplayName("True and False")
+	public void trueAndFalse() {
+		assertTrue(utils.isGreater(10, 5));
+		assertFalse(utils.isGreater(5, 15));
 	}
 }
